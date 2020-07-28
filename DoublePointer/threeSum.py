@@ -29,11 +29,9 @@ class Solution:
         
         res = []
         numbers.sort()
-        for index in range(len(numbers)):
-            if index > 1 and numbers[index] == numbers[index - 1]:
-                continue
-
-            left, right = index, len(numbers) - 1
+        index = 0
+        while index < len(numbers):
+            left, right = index + 1, len(numbers) - 1
             while left < right:
                 if numbers[index] + numbers[left] + numbers[right] > 0:
                     right -= 1
@@ -43,9 +41,16 @@ class Solution:
                     res.append([numbers[index], numbers[left], numbers[right]])
                     left += 1
                     right -= 1
+                    while left < right and numbers[left - 1] == numbers[left]:
+                        left += 1
+
+                    while left < right and numbers[right + 1] == numbers[right]:
+                        right -= 1
+            index += 1
+            while index < len(numbers) and numbers[index] == numbers[index - 1]:
+                index += 1
 
         return res
-
 
 if __name__ == "__main__":
     print(Solution().threeSum([-1,0,1,2,-1,-4]))
