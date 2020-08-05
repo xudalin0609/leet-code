@@ -44,32 +44,6 @@ while iterator.hasNext():
     do something for node 
 """
 
-"""
-Definition of TreeNode:
-class TreeNode:
-    def __init__(self, val):
-        self.val = val
-        self.left, self.right = None, None
-
-Example of iterate a tree:
-iterator = BSTIterator(root)
-while iterator.hasNext():
-    node = iterator.next()
-    do something for node 
-"""
-"""
-Definition of TreeNode:
-class TreeNode:
-    def __init__(self, val):
-        self.val = val
-        self.left, self.right = None, None
-
-Example of iterate a tree:
-iterator = BSTIterator(root)
-while iterator.hasNext():
-    node = iterator.next()
-    do something for node 
-"""
 
 
 class BSTIterator:
@@ -103,4 +77,25 @@ class BSTIterator:
             while self.stack and self.stack[-1].right == n:
                 n = self.stack.pop()
         
+        return node
+
+
+class BSTIterator2:
+
+    def __init__(self):
+        self.stack = []
+        self.findMostLeft(root)
+
+    def findMostLeft(self, node):
+        while node:
+            self.stack.append(node)
+            node = node.left
+
+    def hasNext(self):
+        return bool(self.stack)
+
+    def next(self):
+        node = self.stack.pop()
+        if node.right:
+            self.findMostLeft(node.right)
         return node
