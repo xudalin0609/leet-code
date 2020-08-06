@@ -37,6 +37,7 @@ class Point:
         self.x = a
         self.y = b
 """
+import collections
 
 class Solution:
     """
@@ -45,5 +46,53 @@ class Solution:
     @param destination: a point
     @return: the shortest path 
     """
+    DIRECTIONS = [
+        (-2, -1), (-2, 1), (-1, 2), (1, 2),
+        (2, 1), (2, -1), (1, -2), (-1, -2),
+    ]
+
     def shortestPath(self, grid, source, destination):
         # write your code here
+        if not grid or not grid[0]:
+            return -1
+
+        quque = collections.deque([(source.x, source.y)])
+        distance = {(source.x, source.y): 0}
+        vistited = set()
+
+        while quque:
+            x, y = quque.popleft()
+            if (x, y) == (destination.x, destination.y):
+                return distance[(x, y)] + 1
+            for delta_x, delta_y in self.DIRECTIONS:
+                next_x = x + delta_x
+                next_y = y + delta_y
+                if not self.is_valid(grid, next_x, next_y) or (next_x, next_y) in distance:
+                    continue
+                distance[(next_x, next_y)] = distance[(x, y)] + 1
+                quque.append((next_x, next_y))
+        return -1
+
+    def is_valid(self, grid, x, y):
+        grid_height = len(grid) - 1
+        grid_weigth = len(grid[0]) - 1
+        if x < 0 or x > grid_height or y < 0 or y > grid_weigth:
+            return False
+        if grid[x][y] == 1:
+            return False
+        return True
+
+
+if __name__ == "__main__":
+    print(Solution().shortestPath([[0,0,0],
+                                   [0,0,0],
+                                   [0,0,0]],
+                                   [2, 0],
+                                   [2, 2]
+                                ))
+    print(Solution().shortestPath([[0,1,0],
+                                   [0,0,1],
+                                   [0,0,0]],
+                                   [2, 0],
+                                   [2, 2]
+                                ))
