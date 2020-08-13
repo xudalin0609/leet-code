@@ -49,7 +49,7 @@ class Solution:
         if root is None:
             return root
 
-        _, node, _= self.helper(root)
+        minimum, node, sum_root= self.helper(root)
 
         return node
 
@@ -65,8 +65,8 @@ class Solution:
         sum_root = left_sum + root.val + right_sum
 
         if left_minimum == min(left_minimum, right_minimum, sum_root):
-            return left_minimum, root, sum_root
+            return left_minimum, left_node, sum_root
         if right_minimum == min(left_minimum, right_minimum, sum_root):
-            return right_minimum, root, sum_root
+            return right_minimum, right_node, sum_root
 
         return sum_root, root, sum_root
