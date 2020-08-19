@@ -53,8 +53,6 @@ class Solution:
 
         return node
 
-
-
     def helper(self, root):
         if root is None:
             return float('inf'), None, 0
