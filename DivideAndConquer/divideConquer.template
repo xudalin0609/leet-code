@@ -1,0 +1,7 @@
+def divide_conquer(root):
+    if root is None:
+        return ...
+    left_result = divide_conquer(node.left)
+    right_result = divide_conquer(node.right)
+    result = merge left_result and right_result to merge result
+    return result

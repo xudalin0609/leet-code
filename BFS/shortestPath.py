@@ -1,41 +1,30 @@
 # LintCode 611
 """
-611. 骑士的最短路线
 中文English
-给定骑士在棋盘上的 初始 位置(一个2进制矩阵 0 表示空 1 表示有障碍物)，找到到达 终点 的最短路线，返回路线的长度。如果骑士不能到达则返回 -1 。
+在一个 n * m 的棋盘中(二维矩阵中 0 表示空 1 表示有障碍物)，骑士的初始位置是 (0, 0) ，他想要达到 (n - 1, m - 1) 这个位置，骑士只能从左边走到右边。找出骑士到目标位置所需要走的最短路径并返回其长度，如果骑士无法达到则返回 -1.
 
 样例
 例1:
 
 输入:
-[[0,0,0],
- [0,0,0],
- [0,0,0]]
-source = [2, 0] destination = [2, 2] 
-输出: 2
+[[0,0,0,0],[0,0,0,0],[0,0,0,0]]
+输出:
+3
 解释:
-[2,0]->[0,1]->[2,2]
+[0,0]->[2,1]->[0,2]->[2,3]
 例2:
 
 输入:
-[[0,1,0],
- [0,0,1],
- [0,0,0]]
-source = [2, 0] destination = [2, 2] 
-输出:-1
+[[0,1,0],[0,0,1],[0,0,0]]
+输出:
+-1
 说明
-如果骑士的位置为 (x,y)，他下一步可以到达以下这些位置:
+如果骑士所在位置为(x,y)，那么他的下一步可以到达以下位置:
 
 (x + 1, y + 2)
-(x + 1, y - 2)
 (x - 1, y + 2)
-"""
-"""
-Definition for a point.
-class Point:
-    def __init__(self, a=0, b=0):
-        self.x = a
-        self.y = b
+(x + 2, y + 1)
+(x - 2, y + 1)
 """
 import collections
 
@@ -46,42 +35,29 @@ class Solution:
     @param destination: a point
     @return: the shortest path 
     """
-    DIRECTIONS = [
-        (-2, -1), (-2, 1), (-1, 2), (1, 2),
-        (2, 1), (2, -1), (1, -2), (-1, -2),
-    ]
-
-    def shortestPath(self, grid, source, destination):
-        # write your code here
-        if not grid or not grid[0]:
+    def shortestPath2(self, grid):
+            # write your code here
+            if not grid or grid[-1][-1] == 1:
+                return -1
+                
+            n = len(grid)
+            m = len(grid[0])
+    
+            delta = [(1,2), (-1,2), (2,1), (-2,1)]
+            queue = [(0,0)]
+            step = 0
+            while queue:
+                size = len(queue)
+                step += 1
+                for i in range(size):
+                    x, y = queue.pop()
+                    for delta_x, delta_y in delta:
+                        if x + delta_x == n - 1 and y + delta_y == m - 1:
+                            return step
+                        if n > x + delta_x >= 0 and m > y + delta_y >= 0 and grid[x + delta_x][y + delta_y] != 1:
+                            grid[x + delta_x][y + delta_y] = 1
+                            queue.insert(0, (x+delta_x, y+delta_y))
             return -1
-
-        quque = collections.deque([(source.x, source.y)])
-        distance = {(source.x, source.y): 0}
-        vistited = set()
-
-        while quque:
-            x, y = quque.popleft()
-            if (x, y) == (destination.x, destination.y):
-                return distance[(x, y)] + 1
-            for delta_x, delta_y in self.DIRECTIONS:
-                next_x = x + delta_x
-                next_y = y + delta_y
-                if not self.is_valid(grid, next_x, next_y) or (next_x, next_y) in distance:
-                    continue
-                distance[(next_x, next_y)] = distance[(x, y)] + 1
-                quque.append((next_x, next_y))
-        return -1
-
-    def is_valid(self, grid, x, y):
-        grid_height = len(grid) - 1
-        grid_weigth = len(grid[0]) - 1
-        if x < 0 or x > grid_height or y < 0 or y > grid_weigth:
-            return False
-        if grid[x][y] == 1:
-            return False
-        return True
-
 
 if __name__ == "__main__":
     print(Solution().shortestPath([[0,0,0],

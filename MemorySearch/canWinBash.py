@@ -21,8 +21,6 @@
 解析：先手拿1个，必胜
 """
 
-
-
 class Solution:
     """
     @param n: an integer
